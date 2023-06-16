@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "825447212946",
+    "project_id": "dbook-project2",
+    "storage_bucket": "dbook-project2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825447212946:android:d159cecb2f6a65dd58034b",
+        "android_client_info": {
+          "package_name": "com.example.dbook_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825447212946-4oq5mhvo8q1b0470e255oqms4kamt1en.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dbook_project",
+            "certificate_hash": "fc69b9c3a18b0353d2f28a3aef2ffeea3e25ed86"
+          }
+        },
+        {
+          "client_id": "825447212946-5d8maj2l0nts7fmur5q17dup0l06sbae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBveO-wQtJElvywdOIucIdlM676BuZuFGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825447212946-5d8maj2l0nts7fmur5q17dup0l06sbae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
