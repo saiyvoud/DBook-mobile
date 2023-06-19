@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'OTP_Password.dart';
+
 class Forget_Password extends StatefulWidget {
   static const routeName = "/Forget_Password";
   @override

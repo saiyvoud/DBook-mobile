@@ -49,56 +49,62 @@ class _My_OrderState extends State<My_Order> {
                       children: [
                         Container(
                             child: Text(
-                              "ຈຳນວນ:",
-                              style: TextStyle(),
-                            )),
+                          "ຈຳນວນ:",
+                          style: TextStyle(),
+                        )),
                       ],
                     ),
                     Column(
                       children: [
                         Container(
                             child: Text(
-                              "LAK 79 000:",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.red),
-                            )),
+                          "LAK 79 000:",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.red),
+                        )),
                       ],
                     ),
                     Container(
                       padding: EdgeInsets.only(left: 40),
                       child: Row(
                         children: [
-                          FlatButton(
-                            minWidth: 20,
-                            height: 35,
-                            onPressed: () {},
-                            color: Colors.grey.shade400,
-                            child: Text(
-                              "ຍົກເລີກ",
-                              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              height: 35,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade400,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text(
+                                "ຍົກເລີກ",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
                             ),
-                            textColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
                           ),
                           SizedBox(
                             width: 12,
                           ),
-                          FlatButton(
-                            minWidth: 20,
-                            height: 35,
-                            onPressed: () {},
-                            color: Colors.blue,
-                            child: Text(
-                              "ຊຳລະເລີຍ",
-                              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              height: 35,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text(
+                                "ຊຳລະ",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
                             ),
-                            textColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -134,56 +140,62 @@ class _My_OrderState extends State<My_Order> {
                       children: [
                         Container(
                             child: Text(
-                              "ຈຳນວນ:",
-                              style: TextStyle(),
-                            )),
+                          "ຈຳນວນ:",
+                          style: TextStyle(),
+                        )),
                       ],
                     ),
                     Column(
                       children: [
                         Container(
                             child: Text(
-                              "LAK 79 000:",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.red),
-                            )),
+                          "LAK 79 000:",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.red),
+                        )),
                       ],
                     ),
                     Container(
                       padding: EdgeInsets.only(left: 40),
                       child: Row(
                         children: [
-                          FlatButton(
-                            minWidth: 20,
-                            height: 35,
-                            onPressed: () {},
-                            color: Colors.grey.shade400,
-                            child: Text(
-                              "ຍົກເລີກ",
-                              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              height: 35,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade400,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text(
+                                "ຍົກເລີກ",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
                             ),
-                            textColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
                           ),
                           SizedBox(
                             width: 12,
                           ),
-                          FlatButton(
-                            minWidth: 20,
-                            height: 35,
-                            onPressed: () {},
-                            color: Colors.blue,
-                            child: Text(
-                              "ຊຳລະເລີຍ",
-                              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              height: 35,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text(
+                                "ຊຳລະ",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
                             ),
-                            textColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                          )
+                          ),
                         ],
                       ),
                     ),
