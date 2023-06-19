@@ -29,7 +29,6 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ResetPasswordServiceProvider()),
       ChangeNotifierProvider(create: (_) => VertifyRegister()),
       ChangeNotifierProvider(create: (_) => AuthServiceProvider()),
-      //ChangeNotifierProvider(create: (_)=>ViewModel_Product()),
     ],
     child: const MyApp(),
   ));
