@@ -41,8 +41,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Form_Login(),
-      // home: NavigationMainPage(),
-      //home:Form_Regester(),
       routes: {
         Form_Regester.routeName: (ctx) => Form_Regester(),
         Categories.routeName: (ctx) => Categories(),
