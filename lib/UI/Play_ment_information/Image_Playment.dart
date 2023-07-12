@@ -1,5 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dbook_project/Provider/order/order_provider.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'Bill_Pay_dart.dart';
 
@@ -11,89 +17,121 @@ class Image_Playment extends StatefulWidget {
 }
 
 class _Image_PlaymentState extends State<Image_Playment> {
+  File? file;
+  String? docImage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "ໃສ່ຮູບການຈ່າຍເງີນ",
-          style: TextStyle(color: Colors.white),
+        appBar: AppBar(
+          title: Text(
+            "ໃສ່ຮູບການຈ່າຍເງີນ",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 30, top: 100),
-            child: Icon(
-              Icons.image,
-              size: 300,
-              color: Colors.grey.shade300,
-            ),
-          ),
-          SizedBox(
-            height: 200,
-          ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              height: 35,
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                "ຍົກເລີກ",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+        body: Consumer<OrderProvider>(
+          builder: (context, orderProvider, child) {
+            if (orderProvider.isLoading == true) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 60),
+                  GestureDetector(
+                    onTap: () async {
+                      var files = await orderProvider.pickCamera();
+                      var cropImage = await orderProvider.cropImage(
+                          imageFile: files!, context: context);
+                      File fileName = File(cropImage!.path);
+                      Uint8List imagebytes = await fileName.readAsBytes();
+                      String base64string = base64.encode(imagebytes);
+                      setState(() {
+                        file = fileName;
+                        docImage = "data:image/jpg;base64,${base64string}";
+                      });
+                    },
+                    child: Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: file == null
+                          ? Icon(
+                            Icons.image,
+                            size: 300,
+                            color: Colors.grey.shade300,
+                          )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                width: 200,
+                                child: Image.file(
+                                  file!,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 200,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          height: 60,
+                          width: 120,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade400,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Text(
+                              "ຍົກເລີກ",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Bill_Pay()));
+                        },
+                        child: Container(
+                          height: 60,
+                          width: 120,
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Text(
+                              "ບັນທຶກ",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-          ),
-          SizedBox(
-            width: 12,
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Bill_Pay()));
-            },
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                "ບັນທຶກ",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ),
-          ),
-
-          // Container(
-          //   padding: EdgeInsets.only(left: 30),
-          //   child: FlatButton(
-          //     height: 60,
-          //     minWidth: 200,
-          //     onPressed: () {},
-          //     color: Colors.blue,
-          //     child: InkWell(
-          //         onTap: () {
-          //           Navigator.push(context,
-          //               MaterialPageRoute(builder: (context) => Bill_Pay()));
-          //         },
-          //         child: Text(
-          //           "ບັນທືກ",
-          //           style: TextStyle(fontSize: 22),
-          //         )),
-          //     textColor: Colors.white,
-          //     shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(10)),
-          //   ),
-          // )
-        ],
-      ),
-    );
+            );
+          },
+        ));
   }
 }

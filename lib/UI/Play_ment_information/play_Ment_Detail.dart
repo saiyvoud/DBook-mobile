@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dbook_project/model/books_model.dart';
 import 'package:flutter/material.dart';
 
 
@@ -6,7 +6,10 @@ import 'Image_Playment.dart';
 import 'Information_Customer.dart';
 
 class Play_Ment_Detail extends StatefulWidget {
+  final BooksModel booksModel;
   static const routeName = "/Play_Ment_Detail";
+
+  const Play_Ment_Detail({super.key, required this.booksModel});
 
   @override
   State<Play_Ment_Detail> createState() => _Play_Ment_DetailState();
@@ -41,7 +44,7 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             child: Image.network(
-                              "https://img.freepik.com/premium-psd/hardcover-book-mockup-design-isolated_146060-241.jpg?w=2000",
+                              widget.booksModel.image_url!,
                               fit: BoxFit.cover,
                             ),
                             width: 80,
@@ -55,7 +58,7 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                             children: [
                               Container(
                                 child: Text(
-                                  "ກົດຂໍ້ໜຶ່ງຂອງຄວາມສຳພັນ",
+                                  "ຊື່ປື້ມ: ${widget.booksModel.name}",
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
@@ -63,13 +66,13 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                               ),
                               Container(
                                 child: Text(
-                                  "ຈຳນວນ:",
+                                  "ຈຳນວນ: 1",
                                   style: TextStyle(fontSize: 17),
                                 ),
                               ),
                               Container(
                                 child: Text(
-                                  "LAK 998,000",
+                                  "ລາຄາ: ${widget.booksModel.sale_price} LAK",
                                   style: TextStyle(
                                       color: Colors.red, fontSize: 17),
                                 ),
@@ -132,7 +135,7 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                         height: 6,
                       ),
                       Text(
-                        "ຊຳລະຄ່າຂົນສົ່ງປາຍທາງ",
+                        "ລາຄາຈັດສົ່ງ: 15,000 LAK",
                         style: TextStyle(fontSize: 17),
                       )
                     ],
@@ -199,13 +202,16 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                             builder: (context) => Image_Playment()));
                   },
                   child: Container(
-                    height: 60,
+                    height: 50,
+                    width: 120,
                     decoration: BoxDecoration(
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      "ຊຳລະ",
-                      style: TextStyle(fontSize: 22, color: Colors.white),
+                    child: Center(
+                      child: Text(
+                        "ຊຳລະ",
+                        style: TextStyle(fontSize: 22, color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
