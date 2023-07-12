@@ -49,4 +49,26 @@ class OrderApi {
     }
     return null;
   }
+  Future<List<AddressModel>?> getAddress()async{
+       try {
+     
+      final token = await SharePreference.getAccessToken();
+      final userId = await SharePreference.getUserId();
+      Map<String, String> header = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+       Uri url = Uri.parse(Api.getAddressByUser + userId);
+      _respone = await http.get(url,  headers: header);
+      print(_respone.body);
+      if (_respone.statusCode == 200) {
+        var data = jsonDecode(_respone.body);
+        final  address = addressModelFromJson(jsonEncode(data));
+        return address;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
+  }
 }

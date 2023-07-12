@@ -23,12 +23,29 @@ class OrderProvider extends ChangeNotifier {
   List<OrderModel>? _order;
   OrderModel? _book;
   AddressModel? _addressModel;
+  List<AddressModel>? _listAddress;
   final orderService = OrderApi();
   List<OrderModel>? get orders => _order;
+  List<AddressModel>? get listAddress => _listAddress;
   OrderModel? get book => _book;
   get isLoading => _loading;
   get success => _success;
   AddressModel? get addressModel => _addressModel;
+
+  Future<void> getAddress() async {
+    _loading = true;
+    var result = await orderService.getAddress();
+    if (result != null) {
+      //_success = true;
+      _listAddress = result;
+      _loading = false;
+    }else{
+    _loading = false;
+    //_success = false;
+    notifyListeners();
+    }
+
+  }
 
   Future<void> insertAddress() async {
     if (formKey.currentState!.validate()) {
@@ -91,7 +108,8 @@ class OrderProvider extends ChangeNotifier {
       return null;
     }
   }
-   Future<File?> pickCamera() async {
+
+  Future<File?> pickCamera() async {
     try {
       var xImage = await ImagePicker().pickImage(
         source: ImageSource.camera,
@@ -105,4 +123,3 @@ class OrderProvider extends ChangeNotifier {
     }
   }
 }
-

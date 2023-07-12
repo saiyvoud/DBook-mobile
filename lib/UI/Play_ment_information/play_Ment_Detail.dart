@@ -1,6 +1,7 @@
+import 'package:dbook_project/Provider/order/order_provider.dart';
 import 'package:dbook_project/model/books_model.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 
 import 'Image_Playment.dart';
 import 'Information_Customer.dart';
@@ -16,6 +17,12 @@ class Play_Ment_Detail extends StatefulWidget {
 }
 
 class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<OrderProvider>(context, listen: false)..getAddress();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +92,7 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                   ),
                 ],
               ),
-              height: 225.0,
+              height: 125.0,
               width: double.infinity,
               color: Colors.white,
             ),
@@ -97,7 +104,7 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                   padding: EdgeInsets.all(10),
                   color: Colors.white,
                   width: double.infinity,
-                  height: 150,
+                  height: 280,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -109,28 +116,87 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                       SizedBox(
                         height: 12,
                       ),
-                      TextField(
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(),
-                            labelText: "ກະລຸນາເລືອກສາຂາປາຍທາງ",
-                            fillColor: Colors.grey.shade100,
-                            suffixIcon: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              Information_Customer()));
-                                },
-                                child: Icon(
-                                  Icons.change_history_outlined,
-                                  color: Colors.black87,
+                      Consumer<OrderProvider>(
+                          builder: (context, address, child) {
+                        // if (address.isLoading == true) {
+                        //   return Center(
+                        //     child: CircularProgressIndicator(),
+                        //   );
+                        // }
+                        if (address.listAddress == null) {
+                          return TextField(
+                            decoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(),
+                                labelText: "ກະລຸນາເລືອກສາຂາປາຍທາງ",
+                                fillColor: Colors.grey.shade100,
+                                suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Information_Customer()));
+                                    },
+                                    child: Icon(
+                                      Icons.change_history_outlined,
+                                      color: Colors.black87,
+                                    )),
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(60),
                                 )),
-                            filled: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(60),
-                            )),
-                      ),
+                          );
+                        }
+                        return Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text("ບ້ານ",style: TextStyle(fontSize: 18),),
+                                Spacer(),
+                                 Text(address.listAddress![0].village!),
+                              ],
+                            ),
+                             Row(
+                              children: [
+                                Text("ເມືອງ",style: TextStyle(fontSize: 18),),
+                                Spacer(),
+                                 Text(address.listAddress![0].district!),
+                              ],
+                            ), Row(
+                              children: [
+                                Text("ແຂວງ",style: TextStyle(fontSize: 18),),
+                                Spacer(),
+                                 Text(address.listAddress![0].province!),
+                              ],
+                            ), Row(
+                              children: [
+                                Text("ເບີໂທ",style: TextStyle(fontSize: 18),),
+                                Spacer(),
+                                 Text(address.listAddress![0].phone.toString()),
+                              ],
+                            ), Row(
+                              children: [
+                                Text("ຊື່ຜູ້ຮັບ",style: TextStyle(fontSize: 18),),
+                                Spacer(),
+                                 Text(address.listAddress![0].name!),
+                              ],
+                            ), Row(
+                              children: [
+                                Text("ບໍລິສັດຂົນສົ່ງ",style: TextStyle(fontSize: 18),),
+                                Spacer(),
+                                 Text(address.listAddress![0].express!),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("ສາຂາ",style: TextStyle(fontSize: 18),),
+                                Spacer(),
+                                 Text(address.listAddress![0].branch!),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
                       SizedBox(
                         height: 6,
                       ),
@@ -176,7 +242,7 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
               )
             ]),
             SizedBox(
-              height: 140,
+              height: 110,
             ),
             Row(
               children: [
