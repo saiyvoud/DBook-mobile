@@ -24,7 +24,7 @@ class Api {
   static String deleteSupplies = "${endPoint}/supplies";
   // --------- check out -------
   static String checkout = "${endPoint}/check-out";
-  static String getPayments = "${endPoint}/payment";
+  static String getPayments = "${endPoint}/payments";
   static String addPayment = "${endPoint}/payment";
   // --------- address ---------
   static String getOneAddress = "${endPoint}/customer-addresses/";

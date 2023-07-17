@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:dbook_project/model/payment_model.dart';
+
 import '../../model/address_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +12,7 @@ class OrderApi {
   late http.Response _respone;
 
   Future<AddressModel?> insertAddress({
-    required String phone,
+    required int phone,
     required String name,
     required String village,
     required String district,
@@ -30,7 +32,7 @@ class OrderApi {
       var body = {
         "user_id": userId,
         "name": name,
-        "phone": phone,
+        "phone": phone.toString(),
         "village": village,
         "district": district,
         "province": province,
@@ -49,22 +51,46 @@ class OrderApi {
     }
     return null;
   }
-  Future<List<AddressModel>?> getAddress()async{
-       try {
-     
+
+  Future<List<AddressModel>?> getAddress() async {
+    try {
       final token = await SharePreference.getAccessToken();
       final userId = await SharePreference.getUserId();
       Map<String, String> header = {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       };
-       Uri url = Uri.parse(Api.getAddressByUser + userId);
-      _respone = await http.get(url,  headers: header);
+      Uri url = Uri.parse(Api.getAddressByUser + userId);
+      _respone = await http.get(url, headers: header);
       print(_respone.body);
       if (_respone.statusCode == 200) {
         var data = jsonDecode(_respone.body);
-        final  address = addressModelFromJson(jsonEncode(data));
+        final address = addressModelFromJson(jsonEncode(data));
         return address;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
+  }
+
+  Future<List<PaymentModel>?> getPayments() async {
+    try {
+      final token = await SharePreference.getAccessToken();
+      Map<String, String> header = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      Uri url = Uri.parse(Api.getPayments);
+      _respone = await http.get(url, headers: header);
+      
+      if (_respone.statusCode == 200 || _respone.statusCode == 201) {
+      
+        var data = jsonDecode(_respone.body);
+        var result = jsonEncode(data);
+         
+        final payments = paymentModelFromJson(result);
+        return payments;
       }
     } catch (e) {
       rethrow;

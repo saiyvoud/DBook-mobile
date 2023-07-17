@@ -69,14 +69,14 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
                   Container(
                       padding: EdgeInsets.only(left: 12),
                       child: Text(
-                        "ລາຄາ: ${categories.book!.sale_price.toString()} LAK",
-                        style: TextStyle(fontSize: 30, color: Colors.redAccent),
+                        "ລາຄາ: ${categories.book!.sale_price.toString()} LAK / ${categories.book!.quantity.toString()} ຈຳນວນ",
+                        style: TextStyle(fontSize: 25, color: Colors.redAccent),
                       )),
                   Container(
                       padding: EdgeInsets.only(left: 12),
                       child: Text(
                         "ຊື່ປື້ມ: ${categories.book!.name}",
-                        style: TextStyle(fontSize: 30, color: Colors.black),
+                        style: TextStyle(fontSize: 25, color: Colors.black),
                       )),
                   // Container(
                   //     padding: EdgeInsets.only(left: 12),
@@ -115,7 +115,7 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
                           width: 20,
                         ),
                         Text(
-                          "${categories.book!.quantity.toString()}",
+                          "1",
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.w400),
                         ),

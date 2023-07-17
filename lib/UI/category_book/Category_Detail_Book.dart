@@ -9,7 +9,7 @@ class Category_Detail extends StatefulWidget {
   final String name;
   static const routeName = "/Category_Detail";
 
-  const Category_Detail({super.key,required this.id,required this.name});
+  const Category_Detail({super.key, required this.id, required this.name});
   @override
   State<Category_Detail> createState() => _Category_DetailState();
 }
@@ -39,7 +39,6 @@ class _Category_DetailState extends State<Category_Detail> {
                 fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
           ),
         ),
-        
         body: Consumer<CategoriesProvider>(
           builder: (context, categoriesProvider, child) {
             if (categoriesProvider.bookLoading == true) {

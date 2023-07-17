@@ -14,12 +14,11 @@ class AddressModel {
   final String? express;
   final String? branch;
   AddressModel({
-      this.id,
+    this.id,
     this.user_id,
     this.phone,
     this.express,
     this.branch,
-  
     this.name,
     this.village,
     this.district,
@@ -28,7 +27,7 @@ class AddressModel {
   factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
         id: json['id'],
         user_id: json['user_id'],
-        phone: json['phone'],
+        phone: int.parse(json['phone'].toString()),
         name: json['name'],
         village: json['village'],
         district: json['district'],
