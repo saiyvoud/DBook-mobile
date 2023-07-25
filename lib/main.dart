@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         OTP_Password.routeName: (cxt) => OTP_Password(),
         New_Password.routeName: (cxt) => New_Password(),
         Bill_Pay.routeName: (cxt) => Bill_Pay(),
-        Image_Playment.routeName: (cxt) => Image_Playment(),
+       
         OTP_Register_Password.routeName: (cxt) => OTP_Register_Password(),
       },
     );

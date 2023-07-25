@@ -5,11 +5,50 @@ import 'package:dbook_project/model/payment_model.dart';
 import '../../model/address_model.dart';
 import 'package:http/http.dart' as http;
 
+import '../../model/order_model.dart';
 import '../../share_preferences/share_preferences.dart';
 import '../api.dart';
 
 class OrderApi {
   late http.Response _respone;
+  Future<OrderModel?> insertOrder({
+    
+    required int book_id,
+    required int sale_price,
+    required String date,
+      required String image,
+  }) async {
+    try {
+      Uri url = Uri.parse(Api.postAddress);
+      final token = await SharePreference.getAccessToken();
+      final userId = await SharePreference.getUserId();
+      final qty = await SharePreference.getQty();
+      Map<String, String> header = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      int total = int.parse(qty) * sale_price;
+      final body = {
+        "user_id": userId,
+        "book_id": book_id.toString(),
+        "qty": qty,
+        "sale_price": sale_price.toString(),
+        "total": total.toString(),
+        "date": date.toString(),
+        "image": image
+      };
+       _respone = await http.post(url, body: body, headers: header);
+       if (_respone.statusCode == 200) {
+        print("========>${_respone.body}");
+        var data = jsonDecode(_respone.body);
+        final OrderModel order = OrderModel.fromJson(data['data']);
+        return order;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
+  }
 
   Future<AddressModel?> insertAddress({
     required int phone,
@@ -83,12 +122,11 @@ class OrderApi {
       };
       Uri url = Uri.parse(Api.getPayments);
       _respone = await http.get(url, headers: header);
-      
+
       if (_respone.statusCode == 200 || _respone.statusCode == 201) {
-      
         var data = jsonDecode(_respone.body);
         var result = jsonEncode(data);
-         
+
         final payments = paymentModelFromJson(result);
         return payments;
       }

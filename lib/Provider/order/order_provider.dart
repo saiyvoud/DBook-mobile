@@ -21,21 +21,45 @@ class OrderProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   bool _loading = false;
   bool _success = false;
-  List<OrderModel>? _order;
-  OrderModel? _book;
+  List<OrderModel>? _orderList;
+  OrderModel? _order;
   AddressModel? _addressModel;
   List<AddressModel>? _listAddress;
   List<PaymentModel>? _lisPayment;
   final orderService = OrderApi();
   // ------ List ------
-  List<OrderModel>? get orders => _order;
+  List<OrderModel>? get orders => _orderList;
   List<AddressModel>? get listAddress => _listAddress;
   List<PaymentModel>? get listPayment => _lisPayment;
-  OrderModel? get book => _book;
+  OrderModel? get order => _order;
   // ------ one ------
   get isLoading => _loading;
   get success => _success;
   AddressModel? get addressModel => _addressModel;
+
+  Future<void> insertOrder({
+   
+    required int book_id,
+    required int sale_price,
+    required String date,
+    required String image,
+  }) async {
+    _loading = true;
+    var result = await orderService.insertOrder(
+       
+        book_id: book_id,
+        sale_price: sale_price,
+        date: date,
+        image: image);
+    if (result != null) {
+      _order = result;
+      _loading = false;
+      notifyListeners();
+    } else {
+      _loading = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> getPayments() async {
     _loading = true;
@@ -140,6 +164,7 @@ class OrderProvider extends ChangeNotifier {
       return null;
     }
   }
+
   Future<File?> pickGallery() async {
     try {
       var xImage = await ImagePicker().pickImage(

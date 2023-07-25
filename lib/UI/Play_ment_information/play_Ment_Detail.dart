@@ -1,6 +1,7 @@
 import 'package:dbook_project/Provider/order/order_provider.dart';
 import 'package:dbook_project/model/books_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'Image_Playment.dart';
@@ -8,9 +9,11 @@ import 'Information_Customer.dart';
 
 class Play_Ment_Detail extends StatefulWidget {
   final BooksModel booksModel;
+  final int qty;
   static const routeName = "/Play_Ment_Detail";
 
-  const Play_Ment_Detail({super.key, required this.booksModel});
+  const Play_Ment_Detail(
+      {super.key, required this.booksModel, required this.qty});
 
   @override
   State<Play_Ment_Detail> createState() => _Play_Ment_DetailState();
@@ -25,6 +28,7 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
 
   @override
   Widget build(BuildContext context) {
+    var format = NumberFormat("###,###", "en_US");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlue[900],
@@ -73,13 +77,13 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                               ),
                               Container(
                                 child: Text(
-                                  "ຈຳນວນ: 1",
+                                  "ຈຳນວນ: ${widget.qty}",
                                   style: TextStyle(fontSize: 17),
                                 ),
                               ),
                               Container(
                                 child: Text(
-                                  "ລາຄາ: ${widget.booksModel.sale_price} LAK",
+                                  "ລາຄາ: ${format.format(widget.booksModel.sale_price)} LAK",
                                   style: TextStyle(
                                       color: Colors.red, fontSize: 17),
                                 ),
@@ -151,47 +155,72 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                           children: [
                             Row(
                               children: [
-                                Text("ບ້ານ",style: TextStyle(fontSize: 18),),
+                                Text(
+                                  "ບ້ານ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
                                 Spacer(),
-                                 Text(address.listAddress![0].village!),
-                              ],
-                            ),
-                             Row(
-                              children: [
-                                Text("ເມືອງ",style: TextStyle(fontSize: 18),),
-                                Spacer(),
-                                 Text(address.listAddress![0].district!),
-                              ],
-                            ), Row(
-                              children: [
-                                Text("ແຂວງ",style: TextStyle(fontSize: 18),),
-                                Spacer(),
-                                 Text(address.listAddress![0].province!),
-                              ],
-                            ), Row(
-                              children: [
-                                Text("ເບີໂທ",style: TextStyle(fontSize: 18),),
-                                Spacer(),
-                                 Text(address.listAddress![0].phone.toString()),
-                              ],
-                            ), Row(
-                              children: [
-                                Text("ຊື່ຜູ້ຮັບ",style: TextStyle(fontSize: 18),),
-                                Spacer(),
-                                 Text(address.listAddress![0].name!),
-                              ],
-                            ), Row(
-                              children: [
-                                Text("ບໍລິສັດຂົນສົ່ງ",style: TextStyle(fontSize: 18),),
-                                Spacer(),
-                                 Text(address.listAddress![0].express!),
+                                Text(address.listAddress![0].village!),
                               ],
                             ),
                             Row(
                               children: [
-                                Text("ສາຂາ",style: TextStyle(fontSize: 18),),
+                                Text(
+                                  "ເມືອງ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
                                 Spacer(),
-                                 Text(address.listAddress![0].branch!),
+                                Text(address.listAddress![0].district!),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "ແຂວງ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                Spacer(),
+                                Text(address.listAddress![0].province!),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "ເບີໂທ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                Spacer(),
+                                Text(address.listAddress![0].phone.toString()),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "ຊື່ຜູ້ຮັບ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                Spacer(),
+                                Text(address.listAddress![0].name!),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "ບໍລິສັດຂົນສົ່ງ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                Spacer(),
+                                Text(address.listAddress![0].express!),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "ສາຂາ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                Spacer(),
+                                Text(address.listAddress![0].branch!),
                               ],
                             ),
                           ],
@@ -254,7 +283,7 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                   width: 12,
                 ),
                 Text(
-                  "1,838,000 LAK",
+                  "${format.format(widget.qty * widget.booksModel.sale_price! + 15000)} LAK",
                   style: TextStyle(fontSize: 20, color: Colors.red),
                 ),
                 SizedBox(
@@ -265,7 +294,9 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Image_Playment()));
+                            builder: (context) => Image_Playment(
+                                  booksModel: widget.booksModel,
+                                )));
                   },
                   child: Container(
                     height: 50,

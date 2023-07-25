@@ -62,9 +62,7 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    child: Image.network(
-                      categories.book!.image_url!
-                      ),
+                    child: Image.network(categories.book!.image_url!),
                   ),
                   Container(
                       padding: EdgeInsets.only(left: 12),
@@ -110,19 +108,70 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
                         SizedBox(
                           width: 20,
                         ),
-                        counterButton('-'),
+                        OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: CircleBorder(),
+                              backgroundColor:
+                                  Colors.red.shade100, //<-- SEE HERE
+                            ),
+                            onPressed: () {
+                              if (categories.quentity == 1) {
+                              } else {
+                                categories.removeQty();
+                              }
+                            },
+                            child: Container(
+                              width: 45,
+                              height: 45,
+                              padding: EdgeInsets.only(bottom: 4, left: 1),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "-",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    color: Colors.black),
+                              ),
+                            )),
                         SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          "1",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w400),
-                        ),
+                        categories.quentity == 1
+                            ? Text(
+                                "1",
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.w400),
+                              )
+                            : Text(
+                                "${categories.quentity}",
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.w400),
+                              ),
                         SizedBox(
                           width: 20,
                         ),
-                        counterButton('+')
+                        OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: CircleBorder(),
+                              backgroundColor:
+                                  Colors.red.shade100, //<-- SEE HERE
+                            ),
+                            onPressed: () {
+                              categories.addQty();
+                            },
+                            child: Container(
+                              width: 45,
+                              height: 45,
+                              padding: EdgeInsets.only(bottom: 4, left: 1),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "+",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    color: Colors.black),
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -152,7 +201,10 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Play_Ment_Detail(booksModel: categories.book!,)));
+                                    builder: (context) => Play_Ment_Detail(
+                                          booksModel: categories.book!,
+                                          qty: categories.quentity,
+                                        )));
                           },
                           child: Container(
                             width: 100,

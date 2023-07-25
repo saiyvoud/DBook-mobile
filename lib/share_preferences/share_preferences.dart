@@ -11,6 +11,16 @@ class SharePreference {
     prefs.setString("USER_ID", userId);
   }
 
+  static Future<void> addQty(String qty) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("QTY", qty);
+  }
+
+  static Future<void> removeQty(String qty) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("QTY", qty);
+  }
+
   static Future<String> getAccessToken() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     String? authToken;
@@ -23,5 +33,12 @@ class SharePreference {
     String? userId;
     userId = pref.getString("USER_ID") ?? "";
     return userId;
+  }
+
+  static Future<String> getQty() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    String? qty;
+    qty = pref.getString("QTY") ?? "";
+    return qty;
   }
 }

@@ -8,11 +8,13 @@ import 'package:dbook_project/Provider/order/order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
+import '../../model/books_model.dart';
 
 class Image_Playment extends StatefulWidget {
   static const routeName = "/Image_Playment";
+  final BooksModel booksModel;
 
+  const Image_Playment({super.key, required this.booksModel});
   @override
   State<Image_Playment> createState() => _Image_PlaymentState();
 }
@@ -231,6 +233,13 @@ class _Image_PlaymentState extends State<Image_Playment> {
                               btnCancelOnPress: () {},
                               btnOkOnPress: () {},
                             )..show();
+                          } else {
+                            orderProvider.insertOrder(
+                              book_id: widget.booksModel.id!,
+                              sale_price: widget.booksModel.sale_price!,
+                              date: DateTime.now().toString(),
+                              image: docImage!,
+                            );
                           }
                         },
                         child: Container(

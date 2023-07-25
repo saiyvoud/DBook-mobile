@@ -1,6 +1,6 @@
 import 'dart:io';
 
-String baseUrl = "https://48e7-202-137-156-208.ngrok-free.app";
+String baseUrl = "https://4a06-115-84-119-16.ngrok-free.app";
 
 String endPoint = '$baseUrl/api';
 
