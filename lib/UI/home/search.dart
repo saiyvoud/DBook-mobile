@@ -1,5 +1,4 @@
 import 'package:dbook_project/Provider/category/category_provider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -95,7 +94,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                             ),
                             width: 120,
                             height: double.infinity,
-                            // color: Colors.blue,
                             decoration: BoxDecoration(
                                 color: Colors.blueAccent,
                                 border: Border.all(

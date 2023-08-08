@@ -120,10 +120,21 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "ຂົນສົ່ງ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                        Row(
+                          children: [
+                            Text(
+                              "ຂົນສົ່ງ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                            Spacer(),
+                            InkWell(
+                                onTap: () {},
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.green,
+                                ))
+                          ],
                         ),
                         SizedBox(
                           height: 12,

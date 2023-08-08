@@ -10,8 +10,8 @@ class OrderModel {
   final int? total_quantity;
   final int? total_price;
   final String? date;
-  //final String? image;
-  // final String? image_url;
+  final String? image;
+  final String? image_url;
   final String? status;
 
   OrderModel({
@@ -21,8 +21,8 @@ class OrderModel {
     this.total_quantity,
     this.total_price,
     this.date,
-    //this.image,
-    //this.image_url,
+    this.image,
+    this.image_url,
     this.status,
   });
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
@@ -32,8 +32,8 @@ class OrderModel {
         total_quantity: json['total_quantity'],
         total_price: json['total_price'],
         date: json['date'],
-        // image: json['image'],
-        // image_url: json['image_url']
+        image: json['image'],
+        image_url: json['image_url']
       );
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -42,8 +42,8 @@ class OrderModel {
         "total_quantity": total_quantity,
         "total_price": total_price,
         "date": date,
-        //"image": image,
-        // "image_url": image_url
+        "image": image,
+        "image_url": image_url
       };
 }
 

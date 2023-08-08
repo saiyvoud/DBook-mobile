@@ -35,6 +35,6 @@ class Api {
   static String updateAddress= "${endPoint}/customer-addresses/";
   static String deleteAddress= "${endPoint}/customer-addresses/";
   // order
-  static String getOrder = "${endPoint}/getorderbyid/";
+  static String getOrder = "${endPoint}/getSalesByUserId/";
  
 }

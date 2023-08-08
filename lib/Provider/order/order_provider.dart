@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dbook_project/model/address_model.dart';
 import 'package:dbook_project/model/books_model.dart';
 import 'package:dbook_project/model/order_model.dart';
 import 'package:dbook_project/model/payment_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,12 +24,13 @@ class OrderProvider extends ChangeNotifier {
   TextEditingController province = TextEditingController();
   TextEditingController express = TextEditingController();
   TextEditingController branch = TextEditingController();
-
+  final firestore = FirebaseFirestore.instance;
+  final auth = FirebaseAuth.instance.currentUser;
   final formKey = GlobalKey<FormState>();
   bool _loading = false;
   bool _success = false;
-
-  var _cartList = [];
+  bool _update = false;
+  List<String> _cartList = [];
   var _cart = [];
   List<dynamic> _newCart = [];
   List<OrderModel>? _orderList;
@@ -47,6 +51,7 @@ class OrderProvider extends ChangeNotifier {
   // ------ one ------
   get isLoading => _loading;
   get success => _success;
+  get update => _update;
   List<dynamic> get cart => _newCart;
   AddressModel? get addressModel => _addressModel;
 
@@ -94,19 +99,56 @@ class OrderProvider extends ChangeNotifier {
     required BooksModel booksModel,
     required int qty,
   }) async {
-    _loading = true;
+    final userId = await SharePreference.getUserId();
     try {
-      var join = jsonEncode(booksModel);
-      _cartList.add(join);
-      String result = jsonEncode(_cartList);
-      _success = true;
-      _loading = false;
-      await SharePreference.addCart(result);
-      notifyListeners();
+      final QuerySnapshot data = await firestore
+          .collection("cart")
+          .where("userID", isEqualTo: userId)
+          .get();
+      _cartList.clear();
+      for (int i = 0; i < data.docs.length; i++) {
+        _cartList.add(data.docs[i].id);
+      }
+ 
+      if (_cartList.contains(booksModel.id.toString())) {
+        print("=========>Ok Update Amount");
+        await firestore
+            .collection("cart")
+            .doc(booksModel.id.toString())
+            .get()
+            .then((data) {
+          data.reference.update({
+            "amount": data.data()!["amount"] + 1,
+          });
+          _loading = false;
+          _success = true;
+          notifyListeners();
+        });
+      } else {
+        print("=========>Ok Add Cart");
+        await firestore.collection("cart").doc(booksModel.id.toString()).set({
+          "id": booksModel.id.toString(),
+          "userID": userId,
+          "ISBN": booksModel.ISBN,
+          "name": booksModel.name,
+          "author": booksModel.author,
+          "amount": qty,
+          "order_price": booksModel.order_price,
+          "sale_price": booksModel.sale_price,
+          "created_at": booksModel.created_at,
+          "updated_at": booksModel.updated_at,
+          "image_url": booksModel.image_url,
+        });
+        _loading = false;
+        _success = true;
+        notifyListeners();
+      }
     } catch (e) {
+      print(e);
       _loading = false;
       _success = false;
       notifyListeners();
+      rethrow;
     }
   }
 

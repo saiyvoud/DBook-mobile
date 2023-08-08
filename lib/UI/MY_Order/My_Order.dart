@@ -33,8 +33,9 @@ class _My_OrderState extends State<My_Order> {
             );
           }
           return ListView.builder(
-            itemCount: order.orders!.length,
+            itemCount: order.ordersModel!.length,
             itemBuilder: (context, index) {
+              final data = order.ordersModel![index];
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -45,7 +46,8 @@ class _My_OrderState extends State<My_Order> {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.network(
-                        "https://cdn.elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-1024x640.jpeg",
+                       // "https://cdn.elearningindustry.com/wp-content/uploads/2016/05/top-10-books-every-college-student-read-1024x640.jpeg",
+                        "${data.image_url}",
                         fit: BoxFit.cover,
                       )),
                 ),
@@ -53,9 +55,9 @@ class _My_OrderState extends State<My_Order> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        padding: EdgeInsets.only(top: 30),
+                        padding: EdgeInsets.only(top: 20),
                         child: Text(
-                          "ກົດຂໍ້ນຶ່ງຂອງຄວາມສຳພັນ",
+                          "${data.book_name}",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold),
                         )),
@@ -63,7 +65,7 @@ class _My_OrderState extends State<My_Order> {
                       children: [
                         Container(
                             child: Text(
-                          "ຈຳນວນ:",
+                          "ຈຳນວນ: ${data.qty}",
                           style: TextStyle(),
                         )),
                       ],
@@ -72,20 +74,32 @@ class _My_OrderState extends State<My_Order> {
                       children: [
                         Container(
                             child: Text(
-                          "LAK 79 000:",
+                          "ລາຄາ ${data.sale_price}:",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                              // fontWeight: FontWeight.bold,
                               fontSize: 15,
-                              color: Colors.red),
+                              color: Colors.black),
                         )),
                       ],
                     ),
-                    SizedBox(height: 5),
                     Column(
                       children: [
                         Container(
                             child: Text(
-                          "ສຳເລັດແລ້ວ:",
+                          "ລວມ ${data.total} ₭:",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.red),
+                        )),
+                      ],
+                    ),
+                    
+                    Column(
+                      children: [
+                        Container(
+                            child: Text(
+                          "${data.status}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,

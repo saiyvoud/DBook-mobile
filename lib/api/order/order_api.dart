@@ -18,16 +18,17 @@ class OrderApi {
     try {
       final token = await SharePreference.getAccessToken();
       final userId = await SharePreference.getUserId();
-      Uri url = Uri.parse(Api.getOrder + userId);
+      Uri url = Uri.parse(Api.getOrder + userId.toString());
       Map<String, String> header = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       };
       _respone = await http.get(url, headers: header);
-      print("======>"+_respone.body);
-      if (_respone.statusCode == 200 || _respone.statusCode == 201) {
-        final order = ordersModelFromJson(jsonEncode(_respone.body));
+      var data = jsonDecode(_respone.body);
+      print("======>" + _respone.body);
+      if (data['status'] == true) {
+        final order = ordersModelFromJson(jsonEncode(data['data']));
         return order;
       }
     } catch (e) {
