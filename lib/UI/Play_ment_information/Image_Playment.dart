@@ -9,12 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/books_model.dart';
+import '../Navigation_MainPage.dart';
 
 class Image_Playment extends StatefulWidget {
   static const routeName = "/Image_Playment";
   final BooksModel booksModel;
+  final int address_id;
 
-  const Image_Playment({super.key, required this.booksModel});
+  const Image_Playment(
+      {super.key, required this.booksModel, required this.address_id});
   @override
   State<Image_Playment> createState() => _Image_PlaymentState();
 }
@@ -22,13 +25,17 @@ class Image_Playment extends StatefulWidget {
 class _Image_PlaymentState extends State<Image_Playment> {
   File? file;
   String? docImage;
+  // final DIO.Dio _dio = new DIO.Dio();
+  // final DIO.Dio _dioFile = new DIO.Dio();
   @override
   void initState() {
     super.initState();
     Provider.of<OrderProvider>(context, listen: false)..getPayments();
+    // _dio.interceptors.add(DioLoggingInterceptors(_dio));
+    // _dioFile.interceptors.add(DioLoggingInterceptorsFileUpload(_dioFile));
   }
 
-  void showAlert(OrderProvider orderProvider) {
+  void showAlert(OrderProvider orderProvider, context) {
     showDialog(
         context: context,
         builder: (context) {
@@ -114,11 +121,6 @@ class _Image_PlaymentState extends State<Image_Playment> {
                 child: CircularProgressIndicator(),
               );
             }
-            // if (orderProvider.listPayment == null) {
-            //   return Center(
-            //     child: CircularProgressIndicator(),
-            //   );
-            // }
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -169,7 +171,7 @@ class _Image_PlaymentState extends State<Image_Playment> {
                   SizedBox(height: 20),
                   GestureDetector(
                     onTap: () async {
-                      showAlert(orderProvider);
+                      showAlert(orderProvider, context);
                     },
                     child: Container(
                       height: 200,
@@ -222,7 +224,8 @@ class _Image_PlaymentState extends State<Image_Playment> {
                         width: 12,
                       ),
                       InkWell(
-                        onTap: () {
+                        onTap: () async {
+                          print("===========>File${file!.path}");
                           if (file == null) {
                             AwesomeDialog(
                               context: context,
@@ -234,12 +237,42 @@ class _Image_PlaymentState extends State<Image_Playment> {
                               btnOkOnPress: () {},
                             )..show();
                           } else {
-                            orderProvider.insertOrder(
+                            //print("=======>${widget.address_id}");
+                            orderProvider.addOrder(
                               book_id: widget.booksModel.id!,
                               sale_price: widget.booksModel.sale_price!,
+                              address_id: widget.address_id,
                               date: DateTime.now().toString(),
-                              image: docImage!,
+                              image: file!,
                             );
+                            if (orderProvider.success == true) {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.SUCCES,
+                                animType: AnimType.RIGHSLIDE,
+                                title: 'ສຳເລັດ',
+                                desc: 'ຊຳລະເງີນສຳເລັດ',
+                                btnCancelOnPress: () {},
+                                btnOkOnPress: () {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NavigationMainPage()),
+                                      (route) => false);
+                                },
+                              )..show();
+                            } else {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.ERROR,
+                                animType: AnimType.RIGHSLIDE,
+                                title: 'ແຈ້ງເຕືອນ',
+                                desc: 'ຕ້ອງສົ່ງໃບບິນການໂອນກ່ອນ!',
+                                btnCancelOnPress: () {},
+                                btnOkOnPress: () {},
+                              )..show();
+                            }
                           }
                         },
                         child: Container(

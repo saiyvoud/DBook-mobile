@@ -12,11 +12,8 @@ import 'UI/FormLogin/OTP_Password.dart';
 import 'UI/FormLogin/OTP_Register_Password.dart';
 import 'UI/FormLogin/formLogin.dart';
 import 'UI/FormLogin/formregister.dart';
-
 import 'UI/Play_ment_information/Bill_Pay_dart.dart';
-import 'UI/Play_ment_information/Image_Playment.dart';
 import 'UI/Play_ment_information/Information_Customer.dart';
-
 import 'UI/category_book/Category_Book.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -54,7 +51,7 @@ class MyApp extends StatelessWidget {
         OTP_Password.routeName: (cxt) => OTP_Password(),
         New_Password.routeName: (cxt) => New_Password(),
         Bill_Pay.routeName: (cxt) => Bill_Pay(),
-       
+        //Image_Playment.routeName: (cxt) => Image_Playment(booksModel: ,),
         OTP_Register_Password.routeName: (cxt) => OTP_Register_Password(),
       },
     );

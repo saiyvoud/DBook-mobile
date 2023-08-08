@@ -16,7 +16,9 @@ class Api {
   static String getOneBook = "${endPoint}/books/";
   static String updateOneBook = "${endPoint}/books/";
   static String deleteOneBook = "${endPoint}/books/";
-  static String search = "${endPoint}/books";
+  static String search = "${endPoint}/search?name=";
+  static String getTopSale = "${endPoint}/topsale";
+  static String getNewBook = "${endPoint}/booklatest";
   // --------- supplies -----
   static String addSupplies = "${endPoint}/supplies";
   static String getSupplies = "${endPoint}/supplies";
@@ -32,5 +34,7 @@ class Api {
   static String postAddress = "${endPoint}/customer-addresses";
   static String updateAddress= "${endPoint}/customer-addresses/";
   static String deleteAddress= "${endPoint}/customer-addresses/";
+  // order
+  static String getOrder = "${endPoint}/getorderbyid/";
  
 }

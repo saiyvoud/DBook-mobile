@@ -1,50 +1,82 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:dbook_project/model/payment_model.dart';
+import 'package:dio/dio.dart';
 
 import '../../model/address_model.dart';
 import 'package:http/http.dart' as http;
-
 import '../../model/order_model.dart';
 import '../../share_preferences/share_preferences.dart';
 import '../api.dart';
+// import 'package:dio/dio.dart' as DIO;
 
 class OrderApi {
   late http.Response _respone;
-  Future<OrderModel?> insertOrder({
-    
-    required int book_id,
-    required int sale_price,
-    required String date,
-      required String image,
-  }) async {
+  // final DIO.Dio _dio = new DIO.Dio();
+  final Dio dio = new Dio();
+  Future<List<OrdersModel>?> getOrders() async {
     try {
-      Uri url = Uri.parse(Api.postAddress);
       final token = await SharePreference.getAccessToken();
       final userId = await SharePreference.getUserId();
-      final qty = await SharePreference.getQty();
+      Uri url = Uri.parse(Api.getOrder + userId);
       Map<String, String> header = {
+        'Content-type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       };
-      int total = int.parse(qty) * sale_price;
-      final body = {
-        "user_id": userId,
-        "book_id": book_id.toString(),
-        "qty": qty,
-        "sale_price": sale_price.toString(),
-        "total": total.toString(),
-        "date": date.toString(),
-        "image": image
+      _respone = await http.get(url, headers: header);
+      print("======>"+_respone.body);
+      if (_respone.statusCode == 200 || _respone.statusCode == 201) {
+        final order = ordersModelFromJson(jsonEncode(_respone.body));
+        return order;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
+  }
+
+  Future<OrderModel?> addOrder({
+    required int book_id,
+    required int sale_price,
+    required int address_id,
+    required String date,
+    required File image,
+  }) async {
+    try {
+      Uri url = Uri.parse(Api.checkout);
+      final token = await SharePreference.getAccessToken();
+      final userId = await SharePreference.getUserId();
+      final qty = await SharePreference.getQty();
+      //int total = int.parse(qty) * sale_price;
+      // var map = new Map<String, dynamic>();
+      Map<String, String> header = {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
       };
-       _respone = await http.post(url, body: body, headers: header);
-       if (_respone.statusCode == 200) {
-        print("========>${_respone.body}");
-        var data = jsonDecode(_respone.body);
+      final request = http.MultipartRequest('POST', url);
+      request.headers.addAll(header);
+      request.fields['user_id'] = userId.toString();
+      request.fields['address_id'] = address_id.toString();
+      request.fields['detail[0][book_id]'] = book_id.toString();
+      request.fields['detail[0][qty]'] = qty.toString();
+      request.fields['detail[0][sale_price]'] = sale_price.toString();
+      final file = await http.MultipartFile.fromPath('image', image.path);
+      request.files.add(file);
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      print(response.body);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // final Map<String, dynamic> responseData = json.decode(response.body);
+        var data = json.decode(response.body);
+        print("data=====>${data}");
         final OrderModel order = OrderModel.fromJson(data['data']);
         return order;
       }
     } catch (e) {
+      print(e);
       rethrow;
     }
     return null;

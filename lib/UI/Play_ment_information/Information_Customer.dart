@@ -1,6 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dbook_project/Provider/order/order_provider.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +15,7 @@ class _Information_CustomerState extends State<Information_Customer> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue[900],
+          
         ),
         backgroundColor: Colors.orange.shade50,
         body: Consumer<OrderProvider>(

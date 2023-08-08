@@ -1,4 +1,8 @@
+// ignore_for_file: unused_element
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dbook_project/Provider/category/category_provider.dart';
+import 'package:dbook_project/Provider/order/order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -228,23 +232,56 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
                         SizedBox(
                           width: 100,
                         ),
-                        Container(
-                          width: 100,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(
+                        Consumer<OrderProvider>(
+                            builder: (context, orderProvider, child) {
+                        
+                          return InkWell(
+                            onTap: () {
+                              orderProvider.addCart(
+                                  booksModel: categories.book!,
+                                  qty: categories.quentity);
+                              if (orderProvider.success == true) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.SUCCES,
+                                  animType: AnimType.RIGHSLIDE,
+                                  title: 'ສຳເລັດ',
+                                  desc: 'ເພີ່ມສີ້ນຄ້າເຂົ້າກະຕ່າ',
+                                  btnCancelOnPress: () {},
+                                  btnOkOnPress: () {},
+                                )..show();
+                              } else {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.ERROR,
+                                  animType: AnimType.RIGHSLIDE,
+                                  title: 'ຜິດພາດ',
+                                  desc: 'ເພີ່ມເຂົ້າກະຕ່າຜິດພາດ!',
+                                  btnCancelOnPress: () {},
+                                  btnOkOnPress: () {},
+                                )..show();
+                              }
+                            },
+                            child: Container(
+                              width: 100,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.blue,
+                                    width: 5.0,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(15),
                                 color: Colors.blue,
-                                width: 5.0,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.blue,
-                          ),
-                          child: const Center(
-                              child: Text(
-                            'ໃສ່ກະຕ່າ',
-                            style: TextStyle(fontSize: 25, color: Colors.white),
-                          )),
-                        ),
+                              ),
+                              child: const Center(
+                                  child: Text(
+                                'ໃສ່ກະຕ່າ',
+                                style: TextStyle(
+                                    fontSize: 25, color: Colors.white),
+                              )),
+                            ),
+                          );
+                        }),
                       ],
                     ),
                   )
