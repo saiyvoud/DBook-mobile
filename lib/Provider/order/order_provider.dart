@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,13 +7,13 @@ import 'package:dbook_project/model/books_model.dart';
 import 'package:dbook_project/model/order_model.dart';
 import 'package:dbook_project/model/payment_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../api/order/order_api.dart';
-import '../../model/cart_model.dart';
+
 import '../../share_preferences/share_preferences.dart';
 
 class OrderProvider extends ChangeNotifier {
@@ -27,15 +27,15 @@ class OrderProvider extends ChangeNotifier {
   final firestore = FirebaseFirestore.instance;
   final auth = FirebaseAuth.instance.currentUser;
   final formKey = GlobalKey<FormState>();
+  //
   bool _loading = false;
   bool _success = false;
   bool _update = false;
   List<String> _cartList = [];
-  var _cart = [];
   List<dynamic> _newCart = [];
   List<OrderModel>? _orderList;
   List<OrdersModel>? _ordersList;
-  List<CartModel>? _cartModel;
+  List<dynamic> _newCartFireStore = [];
   OrderModel? _order;
   AddressModel? _addressModel;
   List<AddressModel>? _listAddress;
@@ -46,7 +46,6 @@ class OrderProvider extends ChangeNotifier {
   List<OrdersModel>? get ordersModel => _ordersList;
   List<AddressModel>? get listAddress => _listAddress;
   List<PaymentModel>? get listPayment => _lisPayment;
-  List<CartModel>? get cartModel => _cartModel;
   OrderModel? get order => _order;
   // ------ one ------
   get isLoading => _loading;
@@ -70,20 +69,20 @@ class OrderProvider extends ChangeNotifier {
 
   Future<void> getCart() async {
     _loading = true;
-    var result = await SharePreference.getCart();
-
-    if (result != "" || result.isNotEmpty) {
-      _cart.clear();
-      final data = jsonDecode(result);
-      for (int i = 0; i < data.length; i++) {
-        _cart.add(data[i]);
-      }
-      _newCart = _cart;
-      _success = true;
+    var userId = await SharePreference.getUserId();
+    final QuerySnapshot data = await firestore
+        .collection("cart")
+        .where("userID", isEqualTo: userId)
+        .get();
+    _newCartFireStore.clear();
+    for (int i = 0; i < data.docs.length; i++) {
+      _newCartFireStore.add(data.docs[i]);
+    }
+    if (_newCartFireStore.length > 0) {
+      _newCart = _newCartFireStore;
       _loading = false;
       notifyListeners();
     } else {
-      _success = false;
       _loading = false;
       notifyListeners();
     }
@@ -109,9 +108,8 @@ class OrderProvider extends ChangeNotifier {
       for (int i = 0; i < data.docs.length; i++) {
         _cartList.add(data.docs[i].id);
       }
- 
+
       if (_cartList.contains(booksModel.id.toString())) {
-        print("=========>Ok Update Amount");
         await firestore
             .collection("cart")
             .doc(booksModel.id.toString())
@@ -125,7 +123,6 @@ class OrderProvider extends ChangeNotifier {
           notifyListeners();
         });
       } else {
-        print("=========>Ok Add Cart");
         await firestore.collection("cart").doc(booksModel.id.toString()).set({
           "id": booksModel.id.toString(),
           "userID": userId,

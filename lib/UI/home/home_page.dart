@@ -42,8 +42,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: 
-              TextField(
+              child: TextField(
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SearchWidget()));
@@ -62,7 +61,6 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10),
                     )),
               ),
-           
             ),
             SizedBox(
               height: 17,
@@ -240,6 +238,11 @@ class _HomePageState extends State<HomePage> {
                         child: CircularProgressIndicator(),
                       );
                     }
+                    if (topsale.newBooks == null) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                     return Container(
                       height: 190,
                       child: ListView.builder(
@@ -320,7 +323,6 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             );
-                        
                           }),
                     );
                   }),
