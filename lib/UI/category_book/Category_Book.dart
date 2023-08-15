@@ -43,46 +43,88 @@ class _CategoriesState extends State<Categories> {
               );
             }
             return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
+              padding: EdgeInsets.all(5),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 3/ 4,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10
+                ),
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
                 itemCount: categories.category!.length,
                 itemBuilder: (context, index) {
                   final data = categories.category;
                   return Container(
-                    color: Colors.grey.shade300,
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Category_Detail(
-                                    id: data![index].id.toString(),
-                                    name: data[index].name.toString(),
-                                  )));
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Container(
-                                  width: 160,
-                                  height: 110,
-                                  child: Image.network(
-                                    data![index].image_url!,
-                                    fit: BoxFit.cover,
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              data[index].name!,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25,
-                                  color: Colors.black),
-                            )
-                          ],
+                    padding: EdgeInsets.all(12),
+                     decoration: BoxDecoration(
+                                        color: Colors.blueAccent,
+                                        border: Border.all(
+                                          color: Colors.grey,
+                                          width: 0.5,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        gradient: LinearGradient(colors: [
+                                          Colors.white,
+                                          Colors.white
+                                        ]),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black,
+                                              blurRadius: 2.0,
+                                              offset: Offset(2.0, 2.0)
+                                              )
+                                        ]),
+                    child: Container(
+                      
+                      padding: EdgeInsets.all(5),
+                      color: Colors.white,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Category_Detail(
+                                      id: data![index].id.toString(),
+                                      name: data[index].name.toString(),
+                                    )));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                               // padding: EdgeInsets.all(7),
+                                child: Container(
+                                    width: 155,
+                                    height: 185,
+                                    child: Image.network(
+                                      data![index].image_url!,
+                                      fit: BoxFit.cover,
+                                    )),
+                              ),
+                              // SizedBox(
+                              //   height: 10,
+                              // ),
+                              Text(
+                                data[index].name!,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

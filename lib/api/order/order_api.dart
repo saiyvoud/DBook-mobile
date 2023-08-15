@@ -39,7 +39,7 @@ class OrderApi {
 
   Future<OrderModel?> addOrder({
     required int book_id,
-    required int sale_price,
+    required double sale_price,
     required int address_id,
     required String date,
     required File image,

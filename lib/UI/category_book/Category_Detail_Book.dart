@@ -52,14 +52,15 @@ class _Category_DetailState extends State<Category_Detail> {
               );
             }
             return Container(
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.all(20),
               color: Colors.grey.shade300,
+              //color: Colors.white,
               child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200,
                       childAspectRatio: 3 / 4,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10),
                   itemCount: categoriesProvider.books!.length,
                   itemBuilder: (BuildContext ctx, index) {
                     final data = categoriesProvider.books;
@@ -75,15 +76,30 @@ class _Category_DetailState extends State<Category_Detail> {
                       child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            // gradient: LinearGradient(colors: [
+                            //             Colors.white,
+                            //             Colors.white
+                            //           ]),
+                            //           boxShadow: [
+                            //             BoxShadow(
+                            //                 color: Colors.black,
+                            //                 blurRadius: 2.0,
+                            //                 offset: Offset(2.0, 2.0)
+                            //                 )
+
+                            //           ]
+                          ),
                           child: Column(
                             children: [
                               Container(
-                                height: 170,
+                                padding: EdgeInsets.all(5),
+                                // width: 140,
+                                height: 150,
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20),
+                                      top: Radius.circular(10),
                                     ),
                                     child: Image.network(
                                       data![index].image_url.toString(),

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,6 +35,7 @@ class OrderProvider extends ChangeNotifier {
   List<OrderModel>? _orderList;
   List<OrdersModel>? _ordersList;
   List<dynamic> _newCartFireStore = [];
+  double _total = 0.0;
   OrderModel? _order;
   AddressModel? _addressModel;
   List<AddressModel>? _listAddress;
@@ -51,8 +51,38 @@ class OrderProvider extends ChangeNotifier {
   get isLoading => _loading;
   get success => _success;
   get update => _update;
+  get total => _total;
   List<dynamic> get cart => _newCart;
   AddressModel? get addressModel => _addressModel;
+
+  Future<void> addAmountCartFirebase({required String id}) async {
+    final documentSnapshot = await firestore.collection("cart").doc(id).get();
+    documentSnapshot.reference.update({
+      "amount": documentSnapshot.data()!['amount'] + 1,
+    }).then((value) {
+      _success = true;
+      _loading = false;
+      notifyListeners();
+    }).catchError((error) {
+      _success = false;
+      _loading = false;
+      notifyListeners();
+    });
+  }
+   Future<void> removeAmountCartFirebase({required String id}) async {
+    final documentSnapshot = await firestore.collection("cart").doc(id).get();
+    documentSnapshot.reference.update({
+      "amount": documentSnapshot.data()!['amount'] - 1,
+    }).then((value) {
+      _success = true;
+      _loading = false;
+      notifyListeners();
+    }).catchError((error) {
+      _success = false;
+      _loading = false;
+      notifyListeners();
+    });
+  }
 
   Future<void> getOrders() async {
     _loading = true;
@@ -67,6 +97,22 @@ class OrderProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> getTotal() async {
+    _loading = true;
+    var userId = await SharePreference.getUserId();
+    final QuerySnapshot data = await firestore
+        .collection("cart")
+        .where("userID", isEqualTo: userId)
+        .get();
+    _total = 0.0;
+    for (int i = 0; i < data.docs.length; i++) {
+      _total += data.docs[i]['amount'] * data.docs[i]['sale_price'];
+    }
+    _loading = false;
+
+    notifyListeners();
+  }
+
   Future<void> getCart() async {
     _loading = true;
     var userId = await SharePreference.getUserId();
@@ -78,20 +124,28 @@ class OrderProvider extends ChangeNotifier {
     for (int i = 0; i < data.docs.length; i++) {
       _newCartFireStore.add(data.docs[i]);
     }
+    //
     if (_newCartFireStore.length > 0) {
+      await getTotal();
       _newCart = _newCartFireStore;
+
       _loading = false;
       notifyListeners();
     } else {
       _loading = false;
+      _success = false;
+      // await getTotal();
+
       notifyListeners();
     }
   }
 
-  Future<void> deleteCart() async {
-    await SharePreference.deleteQty();
+  Future<void> deleteCart({required String id}) async {
+    _loading = true;
+    await firestore.collection("cart").doc(id).delete();
     _success = true;
-    notifyListeners();
+    _loading = false;
+    await getCart();
   }
 
   Future<void> addCart({
@@ -114,10 +168,11 @@ class OrderProvider extends ChangeNotifier {
             .collection("cart")
             .doc(booksModel.id.toString())
             .get()
-            .then((data) {
+            .then((data) async {
           data.reference.update({
-            "amount": data.data()!["amount"] + 1,
+            "amount": data.data()!["amount"] + qty,
           });
+          await getTotal();
           _loading = false;
           _success = true;
           notifyListeners();
@@ -136,6 +191,7 @@ class OrderProvider extends ChangeNotifier {
           "updated_at": booksModel.updated_at,
           "image_url": booksModel.image_url,
         });
+        await getTotal();
         _loading = false;
         _success = true;
         notifyListeners();
@@ -151,7 +207,7 @@ class OrderProvider extends ChangeNotifier {
 
   Future<void> addOrder({
     required int book_id,
-    required int sale_price,
+    required double sale_price,
     required int address_id,
     required String date,
     required File image,

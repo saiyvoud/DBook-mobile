@@ -9,8 +9,8 @@ class BooksModel {
   final String? name;
   final String? author;
   final String? quantity;
-  final int? order_price;
-  final int? sale_price;
+  final double? order_price;
+  final double? sale_price;
   final String? created_at;
   final String? updated_at;
   final String? image_url;
@@ -33,8 +33,8 @@ class BooksModel {
         name: json['name'],
         author: json['author'],
         quantity: json['quantity'],
-        order_price: json['order_price'],
-        sale_price: json['sale_price'],
+        order_price: double.parse(json['order_price'].toString()) ,
+        sale_price:  double.parse(json['sale_price'].toString()),
         created_at: json['created_at'],
         updated_at: json['updated_at'],
         image_url: json['image_url'],

@@ -11,7 +11,7 @@ class hiveDatabase {
       // key:  HiveCipher(), // Key to encrypt your boxes (Only used in Flutter / Dart IO)
     );
     final catsBox = collection.openBox<Map>('cart');
-    
+    print(catsBox);
     // await catsBox.put('fluffy', {'name': 'Fluffy', 'age': 4});
   }
 }

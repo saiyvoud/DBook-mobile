@@ -1,5 +1,3 @@
-// ignore_for_file: unused_element
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dbook_project/Provider/category/category_provider.dart';
 import 'package:dbook_project/Provider/order/order_provider.dart';
@@ -27,188 +25,85 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
 
   @override
   Widget build(BuildContext context) {
-    Widget counterButton(String icon) {
-      return OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            shape: CircleBorder(),
-            backgroundColor: Colors.red.shade100, //<-- SEE HERE
+    return Consumer<CategoriesProvider>(builder: (context, categories, child) {
+      return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.lightBlue[900],
           ),
-          onPressed: () {},
-          child: Container(
-            width: 45,
-            height: 45,
-            padding: EdgeInsets.only(bottom: 4, left: 1),
-            alignment: Alignment.center,
-            child: Text(
-              icon,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                  color: Colors.black),
-            ),
-          ));
-    }
-
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.lightBlue[900],
-        ),
-        //  backgroundColor: Color(0xFFD265FF),
-        body: Consumer<CategoriesProvider>(
-          builder: (context, categories, child) {
-            if (categories.bookLoading == true) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return SingleChildScrollView(
+          bottomNavigationBar: categories.bookLoading == true
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              :  Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: Container(
+              height: 70,
+              width: double.infinity,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    child: Image.network(categories.book!.image_url!),
-                  ),
-                  Container(
-                      padding: EdgeInsets.only(left: 12),
-                      child: Text(
-                        "ລາຄາ: ${categories.book!.sale_price.toString()} LAK / ${categories.book!.quantity.toString()} ຈຳນວນ",
-                        style: TextStyle(fontSize: 25, color: Colors.redAccent),
-                      )),
-                  Container(
-                      padding: EdgeInsets.only(left: 12),
-                      child: Text(
-                        "ຊື່ປື້ມ: ${categories.book!.name}",
-                        style: TextStyle(fontSize: 25, color: Colors.black),
-                      )),
-                  // Container(
-                  //     padding: EdgeInsets.only(left: 12),
-                  //     child: Text(
-                  //       "ລາຍລະອຽດ",
-                  //       style: TextStyle(fontSize: 20, color: Colors.black),
-                  //     )),
-                  Container(
-                      padding: EdgeInsets.only(left: 12),
-                      child: Text(
-                        "ຊື່ຜູ້ຂຽນ: ${categories.book!.author}",
-                        style: TextStyle(fontSize: 20, color: Colors.black),
-                      )),
-                  Container(
-                      padding: EdgeInsets.only(left: 12),
-                      child: Text(
-                        "ປະເພດປື້ມ: ປື້ມທັມມະ",
-                        style: TextStyle(fontSize: 20, color: Colors.black),
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Row(
-                      children: [
-                        Text(
-                          "ຈຳນວນ",
-                          style: TextStyle(fontSize: 25),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: CircleBorder(),
-                              backgroundColor:
-                                  Colors.red.shade100, //<-- SEE HERE
-                            ),
-                            onPressed: () {
-                              if (categories.quentity == 1) {
-                              } else {
-                                categories.removeQty();
-                              }
-                            },
-                            child: Container(
-                              width: 45,
-                              height: 45,
-                              padding: EdgeInsets.only(bottom: 4, left: 1),
-                              alignment: Alignment.center,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // SizedBox(
+                      //   height: 150,
+                      // ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Play_Ment_Detail(
+                                        booksModel: categories.book!,
+                                        qty: categories.quentity,
+                                      )));
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.blue,
+                                width: 5.0,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.blue,
+                          ),
+                          child: const Center(
                               child: Text(
-                                "-",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                    color: Colors.black),
-                              ),
-                            )),
-                        SizedBox(
-                          width: 20,
+                            'ຊື້ເລີຍ',
+                            style: TextStyle(fontSize: 25, color: Colors.white),
+                          )),
                         ),
-                        categories.quentity == 1
-                            ? Text(
-                                "1",
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w400),
-                              )
-                            : Text(
-                                "${categories.quentity}",
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w400),
-                              ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: CircleBorder(),
-                              backgroundColor:
-                                  Colors.red.shade100, //<-- SEE HERE
-                            ),
-                            onPressed: () {
-                              categories.addQty();
-                            },
-                            child: Container(
-                              width: 45,
-                              height: 45,
-                              padding: EdgeInsets.only(bottom: 4, left: 1),
-                              alignment: Alignment.center,
-                              child: Text(
-                                "+",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                    color: Colors.black),
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 12, left: 12),
-                    width: 500,
-                    height: 50,
-                    color: Colors.grey.shade300,
-                    child: Text(
-                      "ຂົນສົ່ງ 2-3 ມື້",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 30),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 150,
-                        ),
-                        GestureDetector(
+                      ),
+
+                      Consumer<OrderProvider>(
+                          builder: (context, orderProvider, child) {
+                        return InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Play_Ment_Detail(
-                                          booksModel: categories.book!,
-                                          qty: categories.quentity,
-                                        )));
+                            orderProvider.addCart(
+                                booksModel: categories.book!,
+                                qty: categories.quentity);
+                            if (orderProvider.success == true) {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.SUCCES,
+                                animType: AnimType.RIGHSLIDE,
+                                title: 'ສຳເລັດ',
+                                desc: 'ເພີ່ມສີ້ນຄ້າເຂົ້າກະຕ່າ',
+                                btnCancelOnPress: () {},
+                                btnOkOnPress: () {},
+                              )..show();
+                            } else {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.ERROR,
+                                animType: AnimType.RIGHSLIDE,
+                                title: 'ຜິດພາດ',
+                                desc: 'ເພີ່ມເຂົ້າກະຕ່າຜິດພາດ!',
+                                btnCancelOnPress: () {},
+                                btnOkOnPress: () {},
+                              )..show();
+                            }
                           },
                           child: Container(
                             width: 100,
@@ -223,73 +118,206 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
                             ),
                             child: const Center(
                                 child: Text(
-                              'ຊື້ເລີຍ',
+                              'ໃສ່ກະຕ່າ',
                               style:
                                   TextStyle(fontSize: 25, color: Colors.white),
                             )),
                           ),
-                        ),
-                        SizedBox(
-                          width: 100,
-                        ),
-                        Consumer<OrderProvider>(
-                            builder: (context, orderProvider, child) {
-                        
-                          return InkWell(
-                            onTap: () {
-                              orderProvider.addCart(
-                                  booksModel: categories.book!,
-                                  qty: categories.quentity);
-                              if (orderProvider.success == true) {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.SUCCES,
-                                  animType: AnimType.RIGHSLIDE,
-                                  title: 'ສຳເລັດ',
-                                  desc: 'ເພີ່ມສີ້ນຄ້າເຂົ້າກະຕ່າ',
-                                  btnCancelOnPress: () {},
-                                  btnOkOnPress: () {},
-                                )..show();
-                              } else {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.ERROR,
-                                  animType: AnimType.RIGHSLIDE,
-                                  title: 'ຜິດພາດ',
-                                  desc: 'ເພີ່ມເຂົ້າກະຕ່າຜິດພາດ!',
-                                  btnCancelOnPress: () {},
-                                  btnOkOnPress: () {},
-                                )..show();
-                              }
-                            },
-                            child: Container(
-                              width: 100,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.blue,
-                                    width: 5.0,
-                                    style: BorderStyle.solid),
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.blue,
-                              ),
-                              child: const Center(
-                                  child: Text(
-                                'ໃສ່ກະຕ່າ',
-                                style: TextStyle(
-                                    fontSize: 25, color: Colors.white),
-                              )),
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  )
+                        );
+                      }),
+                    ],
+                  ),
+                  SizedBox(height: 20),
                 ],
               ),
-            );
-          },
-        ));
+            ),
+          ),
+          body: categories.bookLoading == true
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Container(
+                  padding: EdgeInsets.all(12),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.blueAccent,
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  gradient: LinearGradient(
+                                      colors: [Colors.white, Colors.white]),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black,
+                                        blurRadius: 2.0,
+                                        offset: Offset(2.0, 2.0))
+                                  ]),
+                              child: Container(
+                                // decoration: BoxDecoration(
+                                //     borderRadius: BorderRadius.circular(20),
+                                // ),
+                                padding: EdgeInsets.all(5),
+                                //color: Colors.amber,
+                                width: 240,
+                                height: 300,
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 12),
+                                  width: 250,
+                                  height: 250,
+                                  child: Image.network(
+                                      categories.book!.image_url!),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                            padding: EdgeInsets.only(left: 12),
+                            child: Text(
+                              "ລາຄາ: ${categories.book!.sale_price.toString()} LAK / ${categories.book!.quantity.toString()} ຈຳນວນ",
+                              style: TextStyle(
+                                  fontSize: 25, color: Colors.redAccent),
+                            )),
+                        Container(
+                            padding: EdgeInsets.only(left: 12),
+                            child: Text(
+                              "ຊື່ປື້ມ: ${categories.book!.name}",
+                              style:
+                                  TextStyle(fontSize: 25, color: Colors.black),
+                            )),
+                        // Container(
+                        //     padding: EdgeInsets.only(left: 12),
+                        //     child: Text(
+                        //       "ລາຍລະອຽດ",
+                        //       style: TextStyle(fontSize: 20, color: Colors.black),
+                        //     )),
+                        Container(
+                            padding: EdgeInsets.only(left: 12),
+                            child: Text(
+                              "ຊື່ຜູ້ຂຽນ: ${categories.book!.author}",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                            )),
+                        Container(
+                            padding: EdgeInsets.only(left: 12),
+                            child: Text(
+                              "ປະເພດປື້ມ: ປື້ມທັມມະ",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                            )),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                "ຈຳນວນ",
+                                style: TextStyle(fontSize: 25),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: CircleBorder(),
+                                    backgroundColor:
+                                        Colors.red.shade100, //<-- SEE HERE
+                                  ),
+                                  onPressed: () {
+                                    if (categories.quentity == 1) {
+                                    } else {
+                                      categories.removeQty();
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 45,
+                                    height: 45,
+                                    padding:
+                                        EdgeInsets.only(bottom: 4, left: 1),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "-",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30,
+                                          color: Colors.black),
+                                    ),
+                                  )),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              categories.quentity == 1
+                                  ? Text(
+                                      "1",
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  : Text(
+                                      "${categories.quentity}",
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: CircleBorder(),
+                                    backgroundColor:
+                                        Colors.red.shade100, //<-- SEE HERE
+                                  ),
+                                  onPressed: () {
+                                    categories.addQty();
+                                  },
+                                  child: Container(
+                                    width: 45,
+                                    height: 45,
+                                    padding:
+                                        EdgeInsets.only(bottom: 4, left: 1),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "+",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30,
+                                          color: Colors.black),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 12, left: 12),
+                          width: 500,
+                          height: 50,
+                          color: Colors.grey.shade300,
+                          child: Text(
+                            "ຂົນສົ່ງ 2-3 ມື້",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+    });
   }
 }
 
@@ -326,7 +354,7 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
 
 
 
-// import 'package:flutter/cupertino.dart';
+
 // import 'package:flutter/material.dart';
 //
 // import '../bay_detail/Buy_detail.dart';
