@@ -44,7 +44,7 @@ class CategoryApi {
       _respone = await http.get(url, headers: header);
       var data = jsonDecode(_respone.body);
       print(data);
-      if (data['status'] == true) {
+      if (_respone.statusCode == 200 || _respone.statusCode == 201) {
         final books = booksModelFromJson(jsonEncode(data['data']));
         return books;
       }

@@ -83,6 +83,59 @@ class OrderApi {
     return null;
   }
 
+  Future<OrderModel?> addOrderFromCart({
+    required List<dynamic> books,
+    required int address_id,
+    required String date,
+    required File image,
+  }) async {
+    try {
+      Uri url = Uri.parse(Api.checkout);
+      final token = await SharePreference.getAccessToken();
+      final userId = await SharePreference.getUserId();
+
+      //int total = int.parse(qty) * sale_price;
+      // var map = new Map<String, dynamic>();
+      Map<String, String> header = {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      final request = http.MultipartRequest('POST', url);
+      request.headers.addAll(header);
+      request.fields['user_id'] = userId.toString();
+      request.fields['address_id'] = address_id.toString();
+      
+      // request.fields['detail[0][book_id]'] = book_id.toString();
+      // request.fields['detail[0][qty]'] = qty.toString();
+      // request.fields['detail[0][sale_price]'] = sale_price.toString();
+      final file = await http.MultipartFile.fromPath('image', image.path);
+      request.files.add(file);
+
+      for (int i = 0; i < books.length; i++) {
+        request.fields.addAll({
+          "detail[${i}][book_id]": books[i]['id'].toString(),
+          "detail[${i}][qty]": books[i]['amount'].toString(),
+          "detail[${i}][sale_price]": books[i]['sale_price'].toString(),
+        });
+      }
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      print(response.body);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // final Map<String, dynamic> responseData = json.decode(response.body);
+        var data = json.decode(response.body);
+        print("data=====>${data}");
+        final OrderModel order = OrderModel.fromJson(data['data']);
+        return order;
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+    return null;
+  }
+
   Future<AddressModel?> insertAddress({
     required int phone,
     required String name,
@@ -112,6 +165,48 @@ class OrderApi {
         "branch": branch,
       };
       _respone = await http.post(url, body: body, headers: header);
+      print(_respone.body);
+      if (_respone.statusCode == 200) {
+        var data = jsonDecode(_respone.body);
+        final AddressModel address = AddressModel.fromJson(data['data']);
+        return address;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
+  }
+
+  Future<AddressModel?> updateAddress({
+    required int address_id,
+    required String phone,
+    required String name,
+    required String village,
+    required String district,
+    required String province,
+    required String express,
+    required String branch,
+  }) async {
+    try {
+      Uri url = Uri.parse(Api.updateAddress + address_id.toString());
+      final token = await SharePreference.getAccessToken();
+      final userId = await SharePreference.getUserId();
+      Map<String, String> header = {
+        // 'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      var body = {
+        "user_id": userId,
+        "name": name,
+        "phone": phone,
+        "village": village,
+        "district": district,
+        "province": province,
+        "express": express,
+        "branch": branch,
+      };
+      _respone = await http.put(url, body: body, headers: header);
       print(_respone.body);
       if (_respone.statusCode == 200) {
         var data = jsonDecode(_respone.body);

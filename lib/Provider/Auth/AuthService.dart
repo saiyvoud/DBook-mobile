@@ -11,6 +11,7 @@ class AuthServiceProvider extends ChangeNotifier {
   TextEditingController phoneLoginController = TextEditingController();
   TextEditingController passwordLoginController = TextEditingController();
   bool loading = false;
+  
   final formKey = GlobalKey<FormState>();
   Future<void> _loading(bool status) async {
     if (status == true) {

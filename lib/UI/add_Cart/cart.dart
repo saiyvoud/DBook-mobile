@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dbook_project/Provider/order/order_provider.dart';
+import 'package:dbook_project/UI/add_Cart/showdetail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +65,13 @@ class _Cart_screenState extends State<Cart_screen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            onPressed: () {}),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ShowDetail(cart: cart.cart,totalPrice: cart.total.toString(),)));
+                            }),
                       )
                     ],
                   ),

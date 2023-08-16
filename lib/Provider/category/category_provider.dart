@@ -15,6 +15,7 @@ class CategoriesProvider extends ChangeNotifier {
   List<TopSaleModel>? _topSale;
   List<BooksModel>? _newBooks;
   BooksModel? _book;
+  bool _success = false;
   final categoryService = CategoryApi();
   int _quantity = 1;
   List<CategoryModel>? get category => _category;
@@ -22,6 +23,7 @@ class CategoriesProvider extends ChangeNotifier {
   List<TopSaleModel>? get topSale => _topSale;
   List<BooksModel>? get newBooks => _newBooks;
   BooksModel? get book => _book;
+  get success => _success;
   get isLoading => _loading;
   get newloading => _newloading;
   get bookLoading => _loading;
@@ -84,16 +86,21 @@ class CategoriesProvider extends ChangeNotifier {
 
   Future<void> search() async {
     _loading = true;
-    var result = await categoryService.search(search: searchTxt.text);
-    if (result!.isNotEmpty) {
+   
+    final result = await categoryService.search(search: searchTxt.text);
+      print("=======>${result!.length}");
+    if (result.length > 0) {
       _books = result;
       _loading = false;
+      _success = true;
       notifyListeners();
     }else{
        _loading = false;
+       _success = false;
        notifyListeners();
     }
-   
+    //  _loading = false;
+    //    notifyListeners();
   }
 
   Future<void> getNewBook() async {

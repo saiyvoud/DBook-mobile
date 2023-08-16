@@ -1,4 +1,5 @@
 import 'package:dbook_project/Provider/order/order_provider.dart';
+import 'package:dbook_project/UI/Play_ment_information/update_infomation_customer_cart.dart';
 import 'package:dbook_project/model/books_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -129,7 +130,13 @@ class _Play_Ment_DetailState extends State<Play_Ment_Detail> {
                             ),
                             Spacer(),
                             InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              Update_Information_Customer()));
+                                },
                                 child: Icon(
                                   Icons.edit,
                                   color: Colors.green,

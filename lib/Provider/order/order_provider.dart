@@ -49,7 +49,7 @@ class OrderProvider extends ChangeNotifier {
   OrderModel? get order => _order;
   // ------ one ------
   get isLoading => _loading;
-  get success => _success;
+  bool get success => _success;
   get update => _update;
   get total => _total;
   List<dynamic> get cart => _newCart;
@@ -59,7 +59,8 @@ class OrderProvider extends ChangeNotifier {
     final documentSnapshot = await firestore.collection("cart").doc(id).get();
     documentSnapshot.reference.update({
       "amount": documentSnapshot.data()!['amount'] + 1,
-    }).then((value) {
+    }).then((value) async {
+      await getCart();
       _success = true;
       _loading = false;
       notifyListeners();
@@ -69,11 +70,13 @@ class OrderProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
-   Future<void> removeAmountCartFirebase({required String id}) async {
+
+  Future<void> removeAmountCartFirebase({required String id}) async {
     final documentSnapshot = await firestore.collection("cart").doc(id).get();
     documentSnapshot.reference.update({
       "amount": documentSnapshot.data()!['amount'] - 1,
-    }).then((value) {
+    }).then((value) async {
+      await getCart();
       _success = true;
       _loading = false;
       notifyListeners();
@@ -115,28 +118,33 @@ class OrderProvider extends ChangeNotifier {
 
   Future<void> getCart() async {
     _loading = true;
-    var userId = await SharePreference.getUserId();
-    final QuerySnapshot data = await firestore
-        .collection("cart")
-        .where("userID", isEqualTo: userId)
-        .get();
-    _newCartFireStore.clear();
-    for (int i = 0; i < data.docs.length; i++) {
-      _newCartFireStore.add(data.docs[i]);
-    }
-    //
-    if (_newCartFireStore.length > 0) {
-      await getTotal();
-      _newCart = _newCartFireStore;
+    try {
+      var userId = await SharePreference.getUserId();
+      final QuerySnapshot data = await firestore
+          .collection("cart")
+          .where("userID", isEqualTo: userId)
+          .get();
+      _newCartFireStore.clear();
+      for (int i = 0; i < data.docs.length; i++) {
+        _newCartFireStore.add(data.docs[i]);
+      }
+      //
 
-      _loading = false;
-      notifyListeners();
-    } else {
-      _loading = false;
-      _success = false;
-      // await getTotal();
-
-      notifyListeners();
+      if (_newCartFireStore.length > 0) {
+        await getTotal();
+        _newCart = _newCartFireStore;
+        _loading = false;
+        _success = true;
+        notifyListeners();
+      } else {
+        //
+        _loading = false;
+        _success = false;
+        notifyListeners();
+        // await getTotal();
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -199,7 +207,7 @@ class OrderProvider extends ChangeNotifier {
     } catch (e) {
       print(e);
       _loading = false;
-      _success = false;
+      //_success = false;
       notifyListeners();
       rethrow;
     }
@@ -235,24 +243,33 @@ class OrderProvider extends ChangeNotifier {
     }
   }
 
-  // Future<void> insertOrder({
-  //   required int book_id,
-  //   required int sale_price,
-  //   required String date,
-  //   required String image,
-  // }) async {
-  //   _loading = true;
-  //   var result = await orderService.insertOrder(
-  //       book_id: book_id, sale_price: sale_price, date: date, image: image);
-  //   if (result != null) {
-  //     _order = result;
-  //     _loading = false;
-  //     notifyListeners();
-  //   } else {
-  //     _loading = false;
-  //     notifyListeners();
-  //   }
-  // }
+  Future<void> addOrderFromCart({
+    required List<dynamic> books,
+    required int address_id,
+    required String date,
+    required File image,
+  }) async {
+    _loading = true;
+
+    var result = await orderService.addOrderFromCart(
+      books: books,
+      date: date,
+      address_id: address_id,
+      image: image,
+    );
+
+    if (result != null) {
+      // print("================>${result.image}");
+      _order = result;
+      _loading = false;
+      _success = true;
+      notifyListeners();
+    } else {
+      _loading = false;
+      _success = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> getPayments() async {
     _loading = true;
@@ -296,6 +313,43 @@ class OrderProvider extends ChangeNotifier {
       );
       print(result!.id);
       if (result.id != null) {
+        _success = true;
+        _addressModel = result;
+        _loading = false;
+        notifyListeners();
+      } else {
+        _loading = false;
+        _success = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> updateAddress({
+    required int address_id,
+    required String phone,
+    required String name,
+    required String village,
+    required String district,
+    required String province,
+    required String express,
+    required String branch,
+  }) async {
+    if (formKey.currentState!.validate()) {
+      _loading = true;
+
+      var result = await orderService.updateAddress(
+        address_id: address_id,
+        phone: phone,
+        name: name,
+        village: village,
+        district: district,
+        province: province,
+        express: express,
+        branch: branch,
+      );
+      //print(result!.id);
+      if (result!.id != null) {
         _success = true;
         _addressModel = result;
         _loading = false;

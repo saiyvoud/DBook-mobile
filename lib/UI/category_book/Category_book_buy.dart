@@ -79,8 +79,8 @@ class _Category_Book_BuyState extends State<Category_Book_Buy> {
                       Consumer<OrderProvider>(
                           builder: (context, orderProvider, child) {
                         return InkWell(
-                          onTap: () {
-                            orderProvider.addCart(
+                          onTap: () async{
+                           await orderProvider.addCart(
                                 booksModel: categories.book!,
                                 qty: categories.quentity);
                             if (orderProvider.success == true) {
